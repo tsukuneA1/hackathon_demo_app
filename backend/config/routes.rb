@@ -21,6 +21,32 @@ Rails.application.routes.draw do
     post :chat
   end
 
+  # Code Analysis routes
+  resources :code_analysis, only: [] do
+    collection do
+      post :batch_analyze
+    end
+    member do
+      post :analyze_repository
+      get :repository_insights
+      get :commit_analysis
+      get :quality_metrics
+    end
+  end
+
+  # Networking routes
+  resources :networking, only: [] do
+    collection do
+      get :discover_engineers
+      get :similar_engineers
+      get :trending_skills
+      post :chat_with_engineer
+    end
+    member do
+      get :engineer_profile
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

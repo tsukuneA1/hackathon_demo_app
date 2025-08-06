@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useRepositories } from '@/hooks/useRepositories';
 import RepositoryCard from '@/components/RepositoryCard';
+import ProfileAnalysis from '@/components/ProfileAnalysis';
+import CodeAnalysis from '@/components/CodeAnalysis';
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth();
@@ -57,6 +59,12 @@ export default function DashboardPage() {
               <h1 className="text-xl font-semibold">Engineer Connect</h1>
             </div>
             <div className="flex items-center space-x-4">
+              <button
+                onClick={() => router.push('/networking')}
+                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Networking
+              </button>
               <img
                 className="h-8 w-8 rounded-full"
                 src={user.avatar_url}
@@ -98,8 +106,21 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Profile Analysis Section */}
+          <ProfileAnalysis />
+
+          {/* Code Analysis Section */}
+          <div className="mt-6">
+            <CodeAnalysis 
+              repositories={repositories} 
+              onRepositoryUpdate={(updatedRepo) => {
+                console.log('Repository updated:', updatedRepo);
+              }}
+            />
+          </div>
+
           {/* Repositories Section */}
-          <div className="bg-white rounded-lg shadow">
+          <div className="bg-white rounded-lg shadow mt-6">
             <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium text-gray-900">
