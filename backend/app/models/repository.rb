@@ -13,18 +13,25 @@ class Repository < ApplicationRecord
   scope :recent, -> { order(last_commit_date: :desc) }
   
   def self.from_github_data(user, repo_data)
+    Rails.logger.info "Creating repository from data: ID=#{repo_data['id']}, Name=#{repo_data['name']}"
+    
+    # Ensure repo_data keys are strings for consistent access
+    repo_data = repo_data.transform_keys(&:to_s)
+    
     find_or_initialize_by(github_id: repo_data['id']).tap do |repo|
       repo.user = user
       repo.name = repo_data['name']
       repo.full_name = repo_data['full_name']
       repo.description = repo_data['description']
-      repo.private = repo_data['private']
+      repo.private = repo_data['private'] || false
       repo.language = repo_data['language']
       repo.stars_count = repo_data['stargazers_count'] || 0
       repo.forks_count = repo_data['forks_count'] || 0
       repo.default_branch = repo_data['default_branch']
       repo.clone_url = repo_data['clone_url']
       repo.html_url = repo_data['html_url']
+      
+      Rails.logger.info "Repository attributes: #{repo.attributes}"
     end
   end
   

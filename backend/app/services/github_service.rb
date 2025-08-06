@@ -9,10 +9,15 @@ class GithubService
     
     begin
       # GitHubからリポジトリ一覧を取得
+      Rails.logger.info "Fetching repositories from GitHub API..."
       repos = @client.repositories(@user.username, per_page: 100)
+      Rails.logger.info "Found #{repos.count} repositories"
+      
       synced_repos = []
       
       repos.each do |repo_data|
+        Rails.logger.info "Processing repository: #{repo_data.full_name}"
+        Rails.logger.info "Repository data: #{repo_data.to_h}"
         repository = Repository.from_github_data(@user, repo_data.to_h)
         
         # README取得
@@ -37,6 +42,7 @@ class GithubService
       raise "GitHub access token is invalid or expired"
     rescue => e
       Rails.logger.error "GitHub API error: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
       raise "Failed to sync repositories: #{e.message}"
     end
   end
