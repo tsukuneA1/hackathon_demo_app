@@ -16,6 +16,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # Profile Analysis routes
+  resource :profile_analysis, only: [:show, :create] do
+    post :chat
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

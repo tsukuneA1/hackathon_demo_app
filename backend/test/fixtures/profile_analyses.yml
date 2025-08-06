@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  summary: MyText
+  skills: MyText
+  technologies: MyText
+  experience_level: MyString
+  personality: MyText
+  strengths: MyText
+  communication_style: MyText
+  analyzed_at: 2025-08-06 09:10:50
+
+two:
+  user: two
+  summary: MyText
+  skills: MyText
+  technologies: MyText
+  experience_level: MyString
+  personality: MyText
+  strengths: MyText
+  communication_style: MyText
+  analyzed_at: 2025-08-06 09:10:50

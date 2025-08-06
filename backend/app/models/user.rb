@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :repositories, dependent: :destroy
+  has_one :profile_analysis, dependent: :destroy
   
   validates :github_id, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true

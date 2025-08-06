@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_05_235758) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_06_001050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "profile_analyses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "summary"
+    t.json "skills"
+    t.json "technologies"
+    t.string "experience_level"
+    t.text "personality"
+    t.json "strengths"
+    t.text "communication_style"
+    t.datetime "analyzed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["analyzed_at"], name: "index_profile_analyses_on_analyzed_at"
+    t.index ["experience_level"], name: "index_profile_analyses_on_experience_level"
+    t.index ["user_id"], name: "index_profile_analyses_on_user_id"
+  end
 
   create_table "repositories", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -53,5 +70,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_235758) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "profile_analyses", "users"
   add_foreign_key "repositories", "users"
 end
