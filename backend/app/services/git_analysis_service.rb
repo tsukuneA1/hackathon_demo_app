@@ -30,13 +30,24 @@ class GitAnalysisService
   end
 
   def get_code_quality_metrics(repository)
-    {
-      complexity_score: calculate_complexity_score(repository),
-      maintainability_index: calculate_maintainability_index(repository),
-      test_coverage_estimate: estimate_test_coverage(repository),
-      documentation_score: calculate_documentation_score(repository),
-      code_style_score: calculate_code_style_score(repository)
-    }
+    if repository.analysis_data.present?
+      {
+        complexity_score: repository.analysis_data['complexity_score'] || 0,
+        maintainability_index: get_maintainability_score(repository.analysis_data['maintainability']),
+        quality_score: repository.analysis_data['quality_score'] || 0,
+        total_lines: repository.analysis_data['total_lines'] || 0,
+        function_count: repository.analysis_data['function_count'] || 0
+      }
+    else
+      {
+        complexity_score: 0,
+        maintainability_index: 0,
+        quality_score: 0,
+        total_lines: 0,
+        function_count: 0,
+        message: 'No analysis data available. Please run code analysis first.'
+      }
+    end
   end
 
   def analyze_commit_patterns(repository)
@@ -319,5 +330,15 @@ class GitAnalysisService
       total_deletions: total_deletions,
       churn_ratio: total_deletions > 0 ? (total_deletions.to_f / total_additions).round(2) : 0
     }
+  end
+
+  def get_maintainability_score(level)
+    case level&.downcase
+    when 'excellent' then 10
+    when 'good' then 8
+    when 'fair' then 6
+    when 'poor' then 3
+    else 0
+    end
   end
 end

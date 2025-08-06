@@ -1,6 +1,6 @@
 class CodeAnalysisController < ApplicationController
   def analyze_repository
-    repository_id = params[:repository_id]
+    repository_id = params[:id]
     repository = current_user.repositories.find(repository_id)
     
     begin
@@ -21,7 +21,7 @@ class CodeAnalysisController < ApplicationController
   end
 
   def repository_insights
-    repository_id = params[:repository_id]
+    repository_id = params[:id]
     repository = current_user.repositories.find(repository_id)
     
     if repository.analysis_data.present?
@@ -38,7 +38,7 @@ class CodeAnalysisController < ApplicationController
   end
 
   def commit_analysis
-    repository_id = params[:repository_id]
+    repository_id = params[:id]
     repository = current_user.repositories.find(repository_id)
     
     begin
@@ -56,7 +56,7 @@ class CodeAnalysisController < ApplicationController
   end
 
   def quality_metrics
-    repository_id = params[:repository_id]
+    repository_id = params[:id]
     repository = current_user.repositories.find(repository_id)
     
     begin
