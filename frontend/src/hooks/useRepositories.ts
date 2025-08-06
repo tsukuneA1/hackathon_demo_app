@@ -23,6 +23,7 @@ interface UseRepositoriesResult {
   error: string | null;
   syncRepositories: () => Promise<void>;
   refetch: () => Promise<void>;
+  updateRepository: (updatedRepo: Repository) => void;
 }
 
 export const useRepositories = (filters?: {
@@ -71,6 +72,12 @@ export const useRepositories = (filters?: {
     }
   };
 
+  const updateRepository = (updatedRepo: Repository) => {
+    setRepositories(prev => 
+      prev.map(repo => repo.id === updatedRepo.id ? updatedRepo : repo)
+    );
+  };
+
   useEffect(() => {
     fetchRepositories();
   }, [filters?.language, filters?.sort, filters?.publicOnly]);
@@ -80,6 +87,7 @@ export const useRepositories = (filters?: {
     loading,
     error,
     syncRepositories,
-    refetch: fetchRepositories
+    refetch: fetchRepositories,
+    updateRepository
   };
 };

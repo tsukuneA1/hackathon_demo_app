@@ -17,7 +17,7 @@ export default function DashboardPage() {
     publicOnly: false
   });
   
-  const { repositories, loading: reposLoading, error, syncRepositories } = useRepositories(filters);
+  const { repositories, loading: reposLoading, error, syncRepositories, updateRepository } = useRepositories(filters);
 
   useEffect(() => {
     if (!loading && !user) {
