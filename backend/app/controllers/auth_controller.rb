@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticate_request
+  skip_before_action :authenticate_request, only: [:github_callback]
 
   def github_callback
     access_token = params[:access_token]
@@ -13,7 +13,21 @@ class AuthController < ApplicationController
       client = Octokit::Client.new(access_token: access_token)
       github_user = client.user
       
-      user = User.from_github_oauth(github_user.to_h, access_token)
+      # Debug: ログでGitHubユーザー情報を確認
+      Rails.logger.info "GitHub user data: #{github_user.inspect}"
+      
+      # GitHubから取得したデータを確認してハッシュに変換
+      user_data = {
+        'id' => github_user.id,
+        'login' => github_user.login,
+        'name' => github_user.name,
+        'email' => github_user.email,
+        'avatar_url' => github_user.avatar_url
+      }
+      
+      Rails.logger.info "Processed user data: #{user_data.inspect}"
+      
+      user = User.from_github_oauth(user_data, access_token)
       
       if user.persisted?
         token = JwtToken.encode(user_id: user.id)
@@ -29,11 +43,17 @@ class AuthController < ApplicationController
           }
         }
       else
-        render json: { error: 'Failed to create user' }, status: :unprocessable_entity
+        Rails.logger.error "User creation failed: #{user.errors.full_messages}"
+        render json: { 
+          error: 'Failed to create user', 
+          details: user.errors.full_messages 
+        }, status: :unprocessable_content
       end
     rescue Octokit::Unauthorized
       render json: { error: 'Invalid GitHub access token' }, status: :unauthorized
     rescue => e
+      Rails.logger.error "Authentication error: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
       render json: { error: "Authentication failed: #{e.message}" }, status: :internal_server_error
     end
   end

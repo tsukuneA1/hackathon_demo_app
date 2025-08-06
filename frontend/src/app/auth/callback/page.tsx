@@ -29,6 +29,8 @@ export default function AuthCallbackPage() {
       }
 
       try {
+        console.log('Received OAuth code:', code);
+        
         // For demo purposes, we'll get the access token directly from GitHub
         // In production, this should be done server-side
         const response = await fetch('/api/auth/github', {
@@ -40,15 +42,19 @@ export default function AuthCallbackPage() {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to exchange code for token');
+          const errorData = await response.json();
+          console.error('Token exchange failed:', errorData);
+          throw new Error(`Failed to exchange code for token: ${errorData.error || response.statusText}`);
         }
 
         const { access_token } = await response.json();
+        console.log('Received access token:', access_token);
+        
         await login(access_token);
         router.push('/dashboard');
       } catch (err) {
         console.error('Authentication error:', err);
-        setError('Authentication failed. Please try again.');
+        setError(`Authentication failed: ${err.message}`);
         setLoading(false);
       }
     };

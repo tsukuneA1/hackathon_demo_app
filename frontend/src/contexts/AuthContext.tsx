@@ -47,12 +47,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (accessToken: string) => {
     try {
+      console.log('Attempting login with access token:', accessToken);
       const response = await api.post('/auth/github', { access_token: accessToken });
+      console.log('Login response:', response.data);
+      
       const { token, user } = response.data;
       
       localStorage.setItem('token', token);
       setUser(user);
     } catch (error) {
+      console.error('Login error:', error);
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+      }
       throw error;
     }
   };

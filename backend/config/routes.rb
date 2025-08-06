@@ -9,6 +9,13 @@ Rails.application.routes.draw do
   post '/auth/github', to: 'auth#github_callback'
   get '/auth/me', to: 'auth#me'
 
+  # Repository routes
+  resources :repositories, only: [:index, :show] do
+    collection do
+      post :sync
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

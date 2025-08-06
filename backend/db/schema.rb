@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_05_231959) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_05_235758) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "repositories", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "github_id", null: false
+    t.string "name", null: false
+    t.string "full_name", null: false
+    t.text "description"
+    t.boolean "private", default: false
+    t.string "language"
+    t.integer "stars_count", default: 0
+    t.integer "forks_count", default: 0
+    t.string "default_branch"
+    t.string "clone_url"
+    t.string "html_url"
+    t.text "readme_content"
+    t.string "last_commit_sha"
+    t.text "last_commit_message"
+    t.datetime "last_commit_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["github_id"], name: "index_repositories_on_github_id", unique: true
+    t.index ["language"], name: "index_repositories_on_language"
+    t.index ["stars_count"], name: "index_repositories_on_stars_count"
+    t.index ["user_id", "name"], name: "index_repositories_on_user_id_and_name"
+    t.index ["user_id"], name: "index_repositories_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.integer "github_id", null: false
@@ -26,4 +52,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_231959) do
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
+
+  add_foreign_key "repositories", "users"
 end
