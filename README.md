@@ -2,6 +2,10 @@
 
 ## 概要
 Engineer ConnectはソフトウェアエンジニアのためのAI駆動型自己紹介・交流サービスです。GitHub OAuthを通じてユーザーのリポジトリ情報を取得し、AIがそれを解析してチャット形式で他のユーザーにプロフィールを説明します。
+### デモ画像
+<img width="1535" height="934" alt="image" src="https://github.com/user-attachments/assets/1526aa8e-a7f8-4672-bf4e-6e56444f2748" />
+<img width="1532" height="941" alt="image" src="https://github.com/user-attachments/assets/dc406f32-d202-494a-b6f3-ddb40a7d6356" />
+<img width="1535" height="941" alt="image" src="https://github.com/user-attachments/assets/21231dbc-5a82-4a7b-b644-f4ba857bb85d" />
 
 ## コンセプト
 現在、ソフトウェアエンジニアの主要な交流ハブはGitHubです。このプラットフォームでは：
